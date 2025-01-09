@@ -12,8 +12,7 @@ function App() {
       <Header />
       <Routes>
         <Route path="/:username" element={<UserPage />}/>
-        <Route path="/:username/post:pId" element={<PostPage />}/>
-
+        <Route path="/:username/post/:pId" element={<PostPage />}/>
       </Routes>
      </Container>
   )
