@@ -122,7 +122,6 @@ export const updateuser = async(req, res) => {
       }
 
       if(req.params.id !== userId.toString()){
-        console.log("hbhb")
         return res.status(400).json({message: "You cannot update other users profile"})
       }
 
@@ -165,3 +164,5 @@ export const getUserProfile = async(req, res) => {
     console.log("error in getUserProfile  user", error.message);
   }
 }
+
+
