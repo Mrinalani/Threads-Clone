@@ -9,8 +9,8 @@ import {
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { BsThreeDots } from "react-icons/bs";
-import Actions from "../../components/Actions";
-import Comment from "../../components/Comment";
+import Actions from "../components/Actions";
+import Comment from "../components/Comment";
 
 const PostPage = () => {
   const [liked, setLiked] = useState();
