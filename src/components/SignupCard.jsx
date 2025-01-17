@@ -50,14 +50,14 @@ export default function SignupCard() {
 
         const data = await res.json();
         if(data.error){
-            showToast("Error", data.error, error)
+            showToast("Error", data.error, "error")
             return
         }
         localStorage.setItem("user-threads", JSON.stringify(data))
         setUser(data)
 
     } catch (error) {
-        console.log(error);
+        showToast("Error", error, "error")
     }
   }
 
