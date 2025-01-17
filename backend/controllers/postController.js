@@ -8,22 +8,22 @@ export const createPost = async (req, res) => {
     if (!text || !postedBy) {
       return res
         .status(400)
-        .json({ message: "postedBy and text field is required" });
+        .json({ error: "postedBy and text field is required" });
     }
 
     const user = await User.findById(postedBy);
 
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ error: "User not found" });
     }
     if (user._id.toString() !== req.user._id.toString()) {
-      return res.status(401).json({ message: "Unauthorized to create post" });
+      return res.status(401).json({ error: "Unauthorized to create post" });
     }
 
     if (text.length > 500) {
       return res
         .status(400)
-        .json({ message: "Text must be less than 500 characters" });
+        .json({ error: "Text must be less than 500 characters" });
     }
 
     const newPost = new Post({
@@ -37,7 +37,7 @@ export const createPost = async (req, res) => {
       .status(201)
       .json({ message: "post created successfully", newPost });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ error: error.message });
     console.log("error in create post", error.message);
   }
 };
@@ -48,12 +48,12 @@ export const getPost = async (req, res) => {
     const post = await Post.findById(id);
 
     if (!post) {
-      res.status(404).json({ message: "Post not Found" });
+      res.status(404).json({ error: "Post not Found" });
     }
 
     res.status(200).json({ message: "Post found", post });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ error: error.message });
     console.log("error in get post", error.message);
   }
 };
@@ -65,18 +65,18 @@ export const deletePost = async (req, res) => {
     const post = await Post.findById(id);
 
     if (!post) {
-      return res.status(404).json({ message: "Post not found" });
+      return res.status(404).json({ error: "Post not found" });
     }
 
     if (post.postedBy.toString() !== req.user._id.toString()) {
-      return res.status(401).json({ message: "Unauthorized to delete post" });
+      return res.status(401).json({ error: "Unauthorized to delete post" });
     }
 
     await Post.findByIdAndDelete(id);
 
     return res.status(200).json({ message: "Post deleted successfully" });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ error: error.message });
     console.log("error in delete post", error.message);
   }
 };
@@ -89,7 +89,7 @@ export const likeUnLikePost = async (req, res) => {
     const user_id = req.user._id;
 
     if (!post) {
-      res.status(404).json({ message: "Post not found" });
+      res.status(404).json({ error: "Post not found" });
     }
 
     console.log(post);
@@ -103,7 +103,7 @@ export const likeUnLikePost = async (req, res) => {
       res.status(200).json({ message: "Post Liked successfully" });
     }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ error: error.message });
     console.log("error in like post", error.message);
   }
 };
@@ -117,13 +117,13 @@ export const replyToPost = async (req, res) => {
     const username = req.user.username;
 
     if (!text) {
-      res.status(400).json({ message: "Text field is required" });
+      res.status(400).json({ error: "Text field is required" });
     }
 
     const post = await Post.findById(postId);
 
     if (!post) {
-      return res.status(404).json({ message: "Post Not Found" });
+      return res.status(404).json({ error: "Post Not Found" });
     }
 
     const reply = { userId, text, userProfilePic, username };
@@ -133,7 +133,7 @@ export const replyToPost = async (req, res) => {
 
     return res.status(200).json({ message: "Reply added successfully", post });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ error: error.message });
     console.log("error in reply to post", error.message);
   }
 };
@@ -150,7 +150,7 @@ export const getFeedPost = async(req,res) => {
 
 
         if (!user) {
-            return res.status(404).json({ message: "User Not Found" });
+            return res.status(404).json({ error: "User Not Found" });
           }
 
           const following = user.following;
@@ -164,7 +164,7 @@ export const getFeedPost = async(req,res) => {
           return res.status(200).json((feedPost))
         
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ error: error.message });
     console.log("error in feed post", error.message);
     }
 }
