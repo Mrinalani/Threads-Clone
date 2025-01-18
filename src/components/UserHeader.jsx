@@ -11,34 +11,40 @@ import {
   MenuList,
   MenuItem,
   useToast,
+  Button,
 } from "@chakra-ui/react";
 import React from "react";
 import { BsInstagram } from "react-icons/bs";
 import { CgMoreO } from "react-icons/cg";
+import { useRecoilValue } from "recoil";
+import userAtom from "../atoms/userAtom";
+import { Link as RouterLink } from "react-router-dom";
 
-const UserHeader = () => {
-    const toast = useToast()
-    const copyURL = () =>{
-        const currentURL = window.location.href;
-        navigator.clipboard.writeText(currentURL).then(() =>{
-          toast({
-            // title: "Account created",
-            // status: "Success",
-            description: "Profile link copied",
-            // duration: 3000,
-            // isClosable: true
-        })
-        })
-    }
+const UserHeader = ({ user }) => {
+  const toast = useToast();
+  const currentUser = useRecoilValue(userAtom)
+  const copyURL = () => {
+    const currentURL = window.location.href;
+    navigator.clipboard.writeText(currentURL).then(() => {
+      toast({
+        // title: "Account created",
+        // status: "Success",
+        description: "Profile link copied",
+        // duration: 3000,
+        // isClosable: true
+      });
+    });
+  };
+
   return (
     <VStack gap={4} alignItems={"start"}>
       <Flex justifyContent={"space-between"} w={"full"}>
         <Box>
           <Text fontSize={"2xl"} fontWeight={"bold"}>
-            Mark
+            {user.name}
           </Text>
           <Flex gap={2} alignItems={"center"}>
-            <Text fontSize={"sm"}>markburg</Text>
+            <Text fontSize={"sm"}>{user.username}</Text>
             <Text
               fontSize={"xs"}
               bg={"gray.dark"}
@@ -50,17 +56,44 @@ const UserHeader = () => {
             </Text>
           </Flex>
         </Box>
-        <Avatar name="Mark" src="/Zuck.avatar.png" size={{
-          base: "md",
-          md:"xl"
-        }} />
+        <Box>
+          {user.profilePic && (
+            <Avatar
+              name={user.name}
+              src={user.profilePic}
+              size={{
+                base: "md",
+                md: "xl",
+              }}
+            />
+          )}
+
+          {!user.profilePic && (
+            <Avatar
+              name={user.name}
+              src="/https:/bit.ly/broken-link"
+              size={{
+                base: "md",
+                md: "xl",
+              }}
+            />
+          )}
+        </Box>
       </Flex>
 
-      <Text>Co-founder, executive chairman and ceo of Meta Platforms.</Text>
+      <Text>{user.bio}</Text>
+
+      {currentUser._id === user._id &&(
+        <Link as={RouterLink} to={'/update'} >
+            <Button size={"sm"}>
+                 Update profile
+            </Button>
+        </Link>
+      )}
 
       <Flex w={"full"} justifyContent={"space-between"}>
         <Flex gap={2} alignItems={"center"}>
-          <Text color={"gray.light"}>3.2k followers</Text>
+          <Text color={"gray.light"}>{user.followers.length} followers</Text>
           <Box w={1} h={1} bg={"gray.light"} borderRadius={"full"}></Box>
           <Link color={"gray.light"}>Instagram.com</Link>
         </Flex>
@@ -74,8 +107,10 @@ const UserHeader = () => {
                 <CgMoreO size={24} cursor={"pointer"} />
               </MenuButton>
               <Portal>
-                <MenuList bg={"gray:dark"} >
-                  <MenuItem value="new-txt" bg={"gray:dark"} onClick={copyURL}>Copy Link</MenuItem>
+                <MenuList bg={"gray:dark"}>
+                  <MenuItem value="new-txt" bg={"gray:dark"} onClick={copyURL}>
+                    Copy Link
+                  </MenuItem>
                 </MenuList>
               </Portal>
             </Menu>
@@ -84,11 +119,24 @@ const UserHeader = () => {
       </Flex>
 
       <Flex w={"full"}>
-        <Flex flex={1} borderBottom={"1.5px solid white"} justifyContent={"center"} pb={3} cursor={"pointer"}>
-            <Text fontWeight={"bold"}>Threads</Text>
+        <Flex
+          flex={1}
+          borderBottom={"1.5px solid white"}
+          justifyContent={"center"}
+          pb={3}
+          cursor={"pointer"}
+        >
+          <Text fontWeight={"bold"}>Threads</Text>
         </Flex>
-        <Flex flex={1} borderBottom={"1px solid gray"} justifyContent={"center"} pb={3} color={"gray.light"} cursor={"pointer"}>
-            <Text fontWeight={"bold"}>Replies</Text>
+        <Flex
+          flex={1}
+          borderBottom={"1px solid gray"}
+          justifyContent={"center"}
+          pb={3}
+          color={"gray.light"}
+          cursor={"pointer"}
+        >
+          <Text fontWeight={"bold"}>Replies</Text>
         </Flex>
       </Flex>
     </VStack>
