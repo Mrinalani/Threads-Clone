@@ -20,6 +20,7 @@ import useShowToast from '../hooks/useShowToast'
 
 export default function UpdateProfilePage() {
     const[user, setUser] = useRecoilState(userAtom)
+    const [updating, setUpdating] = useState(false)
     const [inputs, setInputs] = useState({
         name:user.name,
         username:user.username,
@@ -36,6 +37,8 @@ export default function UpdateProfilePage() {
     const handleSubmit = async(e) => {
         try {
             e.preventDefault();
+            if(updating) return;
+            setUpdating(true)
             const res = await fetch(`/api/users/update/${user._id}`, {
                 method: "PUT",
                 headers: {
@@ -54,10 +57,12 @@ export default function UpdateProfilePage() {
 
         } catch (error) {
             showToast("Error", error, "error")
+        }finally{
+          setUpdating(false)
         }
     }
   return (
-    <form action="" onSubmit={handleSubmit}>
+    <form action="" onSubmit={handleSubmit} >
     <Flex
       align={'center'}
       justify={'center'}
@@ -149,6 +154,7 @@ export default function UpdateProfilePage() {
           </Button>
           <Button
             type='submit'
+            isLoading={updating}
             bg={'green.400'}
             color={'white'}
             w="full"
