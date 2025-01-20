@@ -32,10 +32,13 @@ export default function LoginCard() {
   })
   const showToast = useShowToast()
   const setUser = useSetRecoilState(userAtom)
+  const [loading, setLoading] = useState(false);
 
 
   const handleLogin = async() => {
     try {
+      if(loading) return null;
+      setLoading(true)
         const res = await fetch('api/users/login', {
             method: "Post",
             headers: {
@@ -56,6 +59,8 @@ export default function LoginCard() {
 
     } catch (error) {
         showToast("Error", error, "error")
+    }finally{
+      setLoading(false)
     }
   }
 
@@ -101,6 +106,7 @@ export default function LoginCard() {
             <Stack spacing={10} pt={2}>
               <Button
                 loadingText="Submitting"
+                isLoading={loading}
                 size="lg"
                 bg={useColorModeValue("gray.600", "gray.700")}
                 color={'white'}

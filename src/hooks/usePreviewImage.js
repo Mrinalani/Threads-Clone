@@ -9,7 +9,6 @@ const usePreviewImage = () => {
       const file = e.target.files[0];
       console.log(file)
       if(file && file.type.startsWith("image/")){
-        console.log("jhj")
           const reader = new FileReader()
 
           reader.onloadend = () => {

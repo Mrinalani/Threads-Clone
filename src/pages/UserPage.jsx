@@ -16,10 +16,8 @@ const UserPage = () => {
       try {
         const res = await fetch(`/api/users/profile/${username}`)
         const data = await res.json()
-        console.log(data)
 
         if(data.error){
-          console.log("dbcjh", data.error)
           showToast("Error", data.error, "error")
           return
         }
@@ -41,7 +39,8 @@ const UserPage = () => {
     )
   }
 
-  if(!user && !loading) return <h1>User not Found</h1>;
+
+if(!user && !loading) return <h1>User not Found</h1>;
   return (
     <>
       <UserHeader user = {user}/>
