@@ -170,7 +170,7 @@ export const getFeedPost = async(req,res) => {
           console.log(feedPost)
 
 
-          return res.status(200).json((feedPost))
+          return res.status(200).json(feedPost)
         
     } catch (error) {
         res.status(500).json({ error: error.message });

@@ -30,7 +30,8 @@ const postSchema = mongoose.Schema({
         required: true,
       },
       userProfilePic:{
-        type: String
+        type: String,
+        default: null,
       },
       username:{
         type:String
