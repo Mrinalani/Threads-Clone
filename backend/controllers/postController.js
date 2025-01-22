@@ -105,10 +105,13 @@ export const likeUnLikePost = async (req, res) => {
     const isLiked = post.likes.includes(user_id);
 
     if (isLiked) {
-      await Post.updateOne({ _id: id }, { $pull: { likes: user_id } });
+     const post = await Post.updateOne({ _id: id }, { $pull: { likes: user_id } });
+     console.log(post)
+
       res.status(200).json({ message: "Post UnLiked successfully" });
     } else {
-      await Post.updateOne({ _id: id }, { $push: { likes: user_id } });
+     const post =  await Post.updateOne({ _id: id }, { $push: { likes: user_id } });
+      console.log(post)
       res.status(200).json({ message: "Post Liked successfully" });
     }
   } catch (error) {

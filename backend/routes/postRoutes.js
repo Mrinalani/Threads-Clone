@@ -6,8 +6,8 @@ const router = express.Router();
 
 router.get("/feed", protectRoute, getFeedPost);         
 router.post("/create", protectRoute, createPost);       
-router.post("/like/:id", protectRoute, likeUnLikePost); 
-router.post("/reply/:id", protectRoute, replyToPost);   
+router.put("/like/:id", protectRoute, likeUnLikePost); 
+router.put("/reply/:id", protectRoute, replyToPost);   
 router.delete("/:id", protectRoute, deletePost);        
 router.get("/:id", getPost);                           
 

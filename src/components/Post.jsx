@@ -9,7 +9,6 @@ import {formatDistanceToNow} from 'date-fns'
 
 const Post = ({post, postedBy}) => {
     console.log("post and posted by", post, postedBy)
-  const [liked, setLiked] = useState()
   const [user, setuser] = useState(null)
   const showToast = useShowToast()
   const navigate = useNavigate()
@@ -110,14 +109,14 @@ const Post = ({post, postedBy}) => {
          )}
         
         <Flex gap={3} my={1}>
-        <Actions liked={liked} setLiked={setLiked}/>
+        <Actions post={post}/>
         </Flex>
 
-        <Flex gap={2} alignItems={"center"}>
+        {/* <Flex gap={2} alignItems={"center"}>
           <Text color={"gray.light"} fontSize={"sm"}>{post.replies.length} replies</Text>
           <Box w={0.5} h={0.5} borderRadius={"full"} bg={"gray.light"}></Box>
           <Text color={"gray.light"} fontSize={"sm"}>{post.likes.length} likes</Text>
-        </Flex>
+        </Flex> */}
         </Flex>
       </Flex>
     </Link>
