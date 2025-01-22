@@ -24,11 +24,15 @@ import { useRecoilValue } from "recoil";
 
 const Actions = ({ post: post_}) => {
 
+	const { isOpen, onOpen, onClose } = useDisclosure()
+
 	const [post, setPost] = useState(post_);
 	const showToast = useShowToast()
 	const user = useRecoilValue(userAtom)
 	const [liked, setLiked] = useState(post_.likes.includes(user?._id));
 	const [isliking, setIsLiking] = useState(false);
+	const [isReplying, setIsReplying] = useState(false);
+	const [reply, setReply] = useState("");
 
 
 	const handleLikeAndUnlike = async() =>{
@@ -63,6 +67,35 @@ const Actions = ({ post: post_}) => {
 			setIsLiking(false)
 		}
 	}
+
+	const handleReply = async() =>{
+		if(isReplying) return;
+		setIsReplying(true)
+		try {
+			if(!user) showToast("Error", "User not found", "error")
+
+			const res = await fetch(`/api/posts/reply/${post._id}`,{
+				method: "PUT",
+				headers:{
+					"content-Type": "application/json"
+				},
+				body: JSON.stringify({text: reply})
+				})	
+				const data = await res.json();
+				if(data.error){
+				  showToast("Error", data.error, "Error")
+				  return;
+				}
+				setPost({...post, replies: [...post.replies, data.reply]})
+				showToast("Error", "Reply posted successfully", "Error")
+				onClose()
+				setReply("")
+		} catch (error) {
+			showToast("Success", error, "error")
+		}finally{
+			setIsReplying(false)
+		}
+	}
 	
 
 	return (
@@ -93,7 +126,7 @@ const Actions = ({ post: post_}) => {
 					role='img'
 					viewBox='0 0 24 24'
 					width='20'
-					// onClick={onOpen}
+					onClick={onOpen}
 				>
 					<title>Comment</title>
 					<path
@@ -115,7 +148,8 @@ const Actions = ({ post: post_}) => {
 					  <Text color={"gray.light"} fontSize={"sm"}>{post.likes.length} likes</Text>
 					</Flex>
 
-			<Modal>
+
+			<Modal isOpen= {isOpen} onClose={onClose}>
 				<ModalOverlay />
 				<ModalContent>
 					<ModalHeader></ModalHeader>
@@ -124,14 +158,14 @@ const Actions = ({ post: post_}) => {
 						<FormControl>
 							<Input
 								placeholder='Reply goes here..'
-								// value={reply}
-								// onChange={(e) => setReply(e.target.value)}
+								value={reply}
+								onChange={(e) => setReply(e.target.value)}
 							/>
 						</FormControl>
 					</ModalBody>
 
 					<ModalFooter>
-						<Button colorScheme='blue' size={"sm"} mr={3}  >
+						<Button colorScheme='blue' size={"sm"} mr={3} onClick={handleReply} isLoading={isReplying} >
 							Reply
 						</Button>
 					</ModalFooter>
