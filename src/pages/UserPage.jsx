@@ -4,12 +4,16 @@ import UserPost from '../components/UserPost'
 import { useParams } from 'react-router-dom';
 import useShowToast from '../hooks/useShowToast';
 import { Flex, Spinner } from '@chakra-ui/react';
+import Post from '../components/Post';
 
 const UserPage = () => {
   const [user, setUser] = useState(null);
+  const [posts, setPosts] = useState([]);
   const {username} = useParams()
   const showToast = useShowToast()
   const [loading, setLoading] = useState(true)
+  const [fetchingPosts, setfetchingPosts] = useState(true)
+
 
   useEffect(() =>{
      const getUser = async() => {
@@ -30,11 +34,28 @@ const UserPage = () => {
      }
 
      const getPosts = async() => {
-       
+       try {
+        console.log(username)
+        const res = await fetch(`/api/posts/user/${username}`)
+        const data = await res.json()
+
+        if(data.error){
+          showToast("Error", data.error, "error")
+          return
+        }
+        setPosts(data)
+        console.log(data)
+       } catch (error) {
+        showToast("Error", error, "error")  
+        setPosts("")
+       }finally{
+        setfetchingPosts(false)
+       }
      }
 
 
      getUser()
+     getPosts()
   },[username, showToast])
 
   if(!user && loading){
@@ -46,10 +67,21 @@ const UserPage = () => {
   }
 
 
+
 if(!user && !loading) return <h1>User not Found</h1>;
   return (
     <>
       <UserHeader user = {user}/>
+      {!fetchingPosts && posts.length === 0 && <h1>User has no posts</h1>} 
+      {fetchingPosts && (
+         <Flex justifyContent={"center"} my={12}>
+         <Spinner size={"xl"}/>
+       </Flex>
+      )}
+
+      {posts.map((post)=>(
+         <Post key={post._id} post={post} postedBy={post.postedBy} />
+      ))}
       {/* <UserPost likes={120} replies={481} postImg={"/post1.png"} postTitle={"Lets talk about threads"} />
       <UserPost likes={2000} replies={12} postImg={"/post2.png"} postTitle={"Nice tutorial"} />
       <UserPost likes={1200} replies={677} postImg={"/post3.png"} postTitle={"I love this guy"} />

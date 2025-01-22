@@ -183,9 +183,9 @@ export const getFeedPost = async(req,res) => {
 
 export const getUserPosts = async(req, res) => {
 try {
-  const username = req.params;
+  const {username} = req.params;
 
-  const user = await User.findOne({username});
+  const user = await User.findOne({username :username});
   if(!user){
     res.status(404).json({ error: "User not found" });
   }
