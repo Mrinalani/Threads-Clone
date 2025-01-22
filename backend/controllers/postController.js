@@ -60,7 +60,7 @@ export const getPost = async (req, res) => {
       res.status(404).json({ error: "Post not Found" });
     }
 
-    res.status(200).json({ message: "Post found", post });
+    res.status(200).json(post);
   } catch (error) {
     res.status(500).json({ error: error.message });
     console.log("error in get post", error.message);

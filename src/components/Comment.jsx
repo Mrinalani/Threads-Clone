@@ -3,12 +3,11 @@ import React, { useState } from "react";
 import { BsThreeDots } from "react-icons/bs";
 import Actions from "./Actions";
 
-const Comment = ({userAvatar, createdAt, comment, username, likes}) => {
-  const [liked, setLiked] = useState();
+const Comment = ({reply, lastReply}) => {
   return (
     <>
       <Flex gap={8} my={2} w={"full"}>
-        <Avatar src={userAvatar} name="Mark" size={"sm"} />
+        <Avatar src={reply.userProfilePic} name="Mark" size={"sm"} />
         <Flex gap={1} w={"full"} flexDirection={"column"}>
           <Flex
             w={"full"}
@@ -16,23 +15,15 @@ const Comment = ({userAvatar, createdAt, comment, username, likes}) => {
             alignItems={"center"}
           >
             <Text fontSize={"sm"} fontWeight={"bold"}>
-              {username}
+              {reply.username}
             </Text>
-            <Flex gap={4} alignItems={"center"}>
-              <Text fontStyle={"sm"} color={"gray.light"}>
-                {createdAt}
-              </Text>
-              <BsThreeDots />
-            </Flex>
+           
           </Flex>
-          <Text>{comment}</Text>
-          <Actions liked={liked} setLiked={setLiked} />
-          <Text fontSize={"sm"} color={"gray.light"}>{likes + (liked ? 1 : 0)} likes</Text>
+          <Text>{reply.text}</Text>
         </Flex>
       </Flex>
 
-      <Divider my={4}/>
-
+{!lastReply? <Divider my={4}/>: null}
     </>
   );
 };

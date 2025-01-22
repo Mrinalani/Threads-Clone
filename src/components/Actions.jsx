@@ -23,6 +23,7 @@ import { useRecoilValue } from "recoil";
 // import postsAtom from "../atoms/postsAtom";
 
 const Actions = ({ post: post_}) => {
+	console.log("testing post", post_)
 
 	const { isOpen, onOpen, onClose } = useDisclosure()
 
