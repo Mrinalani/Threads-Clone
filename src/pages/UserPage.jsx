@@ -28,6 +28,12 @@ const UserPage = () => {
         setLoading(false)
       }
      }
+
+     const getPosts = async() => {
+       
+     }
+
+
      getUser()
   },[username, showToast])
 
@@ -44,10 +50,10 @@ if(!user && !loading) return <h1>User not Found</h1>;
   return (
     <>
       <UserHeader user = {user}/>
-      <UserPost likes={120} replies={481} postImg={"/post1.png"} postTitle={"Lets talk about threads"} />
+      {/* <UserPost likes={120} replies={481} postImg={"/post1.png"} postTitle={"Lets talk about threads"} />
       <UserPost likes={2000} replies={12} postImg={"/post2.png"} postTitle={"Nice tutorial"} />
       <UserPost likes={1200} replies={677} postImg={"/post3.png"} postTitle={"I love this guy"} />
-      <UserPost likes={5100} replies={4746} postTitle={"This is my first thread"} />
+      <UserPost likes={5100} replies={4746} postTitle={"This is my first thread"} /> */}
     </>
   )
 }
