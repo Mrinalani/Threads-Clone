@@ -16,17 +16,19 @@ import useGetUserProfile from "../hooks/useGetUserProfile";
 import useShowToast from "../hooks/useShowToast";
 import { useNavigate, useParams } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
 import { DeleteIcon } from "@chakra-ui/icons";
+import postAtom from "../atoms/postAtom";
 
 const PostPage = () => {
   const { loading, user } = useGetUserProfile();
-  const [post, setPost] = useState(null);
+  const [posts, setPosts] = useRecoilState(postAtom)
   const showToast = useShowToast();
   const { pId } = useParams();
   const currentuser = useRecoilValue(userAtom);
   const navigate = useNavigate();
+  const post = posts[0]
 
   useEffect(() => {
     const getPost = async () => {
@@ -40,7 +42,7 @@ const PostPage = () => {
         }
         console.log("getpost1", data);
         console.log("getpost2", post);
-        setPost(data);
+        setPosts([data]);
       } catch (error) {
         showToast("Error", error, "error");
       }
