@@ -191,7 +191,7 @@ try {
 
   const user = await User.findOne({username :username});
   if(!user){
-    res.status(404).json({ error: "User not found" });
+   return res.status(404).json({ error: "User not found" });
   }
 
   const posts = await Post.find({postedBy: user._id}).sort({createdAt: -1});

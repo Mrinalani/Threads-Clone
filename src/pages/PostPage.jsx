@@ -32,6 +32,8 @@ const PostPage = () => {
 
   useEffect(() => {
     const getPost = async () => {
+      setPosts([])
+
       try {
         const res = await fetch(`/api/posts/${pId}`);
         const data = await res.json();
