@@ -11,6 +11,7 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import Message from "./Message";
+import MessageInput from "./MessageInput";
 
 const MessageContainer = () => {
   return (
@@ -69,6 +70,7 @@ const MessageContainer = () => {
       <Message ownMessage={false} />
       <Message ownMessage={true} />
       </Flex>
+      <MessageInput />
     </Flex>
   );
 };
