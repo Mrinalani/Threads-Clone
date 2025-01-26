@@ -45,3 +45,27 @@ try {
 }
 }
 
+export const getMessages = async(req,res) => {
+    try {
+        const {otherUserId} = req.params;
+        const userId = req.user._id;
+
+        const conversation = await Conversation.findOne({
+            participants: { $all: [userId, otherUserId]}
+        })
+
+        if(!conversation){
+            return res.status(400).json({error: "conversation not found"})
+        }
+
+        const messages = await Message.find({
+            conversationId: conversation._id
+        }).sort({createdAt: 1})
+
+        return res.status(200).json(messages)
+
+    } catch (error) {
+        res.status(500).json({error: error.message})
+    console.log("error in get message", error.message);
+    }
+}
