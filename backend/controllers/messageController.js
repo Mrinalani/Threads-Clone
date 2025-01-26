@@ -69,3 +69,18 @@ export const getMessages = async(req,res) => {
     console.log("error in get message", error.message);
     }
 }
+
+export const getConversations = async(req, res) => {
+    const userId = req.user._id;
+    try {
+        const conversations = await Conversation.find({participants: userId}).populate({
+            path: "participants",
+            select: "username profilePic"
+        })
+
+        return res.status(200).json(conversations)
+    } catch (error) {
+        res.status(500).json({error: error.message})
+        console.log("error in get message", error.message);
+    }
+}
