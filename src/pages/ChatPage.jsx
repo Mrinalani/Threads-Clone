@@ -1,11 +1,36 @@
 import { SearchIcon } from "@chakra-ui/icons";
 import { Box, Button, Flex, Input, SkeletonCircle, Text, useColorModeValue } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Conversation from "../components/Conversation";
-import {GiConversation} from "react-icons/gi"
 import MessageContainer from "../components/MessageContainer";
+import useShowToast from "../hooks/useShowToast"
+import { useRecoilState } from "recoil";
+import { conversationsAtom } from "../atoms/messagesAtom";
 
 const ChatPage = () => {
+  const [loadingConversations, setLoadingConversations] = useState(true);
+  const showToast = useShowToast()
+  const [conversations, setConnversations] = useRecoilState(conversationsAtom);
+  useEffect(() => {
+    const getConversations = async() => {
+      try {
+        const res = await fetch("/api/messages/conversations")
+
+        const data = await res.json();
+        console.log(data)
+        if(data.error){
+          showToast("Error", data.error, "error")
+          return;
+        }
+        setConnversations(data)
+      } catch (error) {
+        showToast("Error", error.message, "error")
+      }finally{
+        setLoadingConversations(false);
+      }
+    }
+    getConversations()
+  },[showToast, setConnversations])
   return (
     <Box
       position={"absolute"}
@@ -27,7 +52,7 @@ const ChatPage = () => {
               <Button size={"sm"}><SearchIcon /></Button>
             </Flex>
           </form>
-          {false && (
+          {loadingConversations && (
             [0,1,2,3,4].map((_, i)=>(
               <Flex key={i} gap={4} alignItems={"center"} p={1} borderRadius={"md"}>
                 <Box>
@@ -40,9 +65,12 @@ const ChatPage = () => {
               </Flex>
             ))
           )}
-          <Conversation />
-          <Conversation />
-          <Conversation />
+          {!loadingConversations && (
+             conversations.map((conversation) => (
+                < Conversation key={conversation._id} conversation={conversation} />
+             ))
+          )}
+          
         </Flex>
 
         {/* <Flex
