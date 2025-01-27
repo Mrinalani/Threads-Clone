@@ -5,12 +5,14 @@ import Conversation from "../components/Conversation";
 import MessageContainer from "../components/MessageContainer";
 import useShowToast from "../hooks/useShowToast"
 import { useRecoilState } from "recoil";
-import { conversationsAtom } from "../atoms/messagesAtom";
+import { conversationsAtom, selectedConversationAtom } from "../atoms/messagesAtom";
+import { GiConversation } from "react-icons/gi"
 
 const ChatPage = () => {
   const [loadingConversations, setLoadingConversations] = useState(true);
   const showToast = useShowToast()
   const [conversations, setConnversations] = useRecoilState(conversationsAtom);
+  const [selectedConversion, SetSelectedConversion] = useRecoilState(selectedConversationAtom)
   useEffect(() => {
     const getConversations = async() => {
       try {
@@ -73,19 +75,21 @@ const ChatPage = () => {
           
         </Flex>
 
-        {/* <Flex
-        flex={70}
-        borderRadius={"md"}
-        p={2}
-        flexDir={"column"}
-        alignItems={"center"}
-        justifyContent={"center"}
-        height={"400px"}
-        >
-          <GiConversation size={100}/>
-          <Text>Select a conversation to start messaging</Text>
-        </Flex> */}
-        <MessageContainer />
+        {!selectedConversion._id && (
+            <Flex
+            flex={70}
+            borderRadius={"md"}
+            p={2}
+            flexDir={"column"}
+            alignItems={"center"}
+            justifyContent={"center"}
+            height={"400px"}
+            >
+              <GiConversation size={100}/>
+              <Text>Select a conversation to start messaging</Text>
+            </Flex>
+        )}
+        {selectedConversion._id && <MessageContainer />}
       </Flex>
     </Box>
   );
