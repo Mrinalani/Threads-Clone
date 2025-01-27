@@ -6,7 +6,6 @@ export const createPost = async (req, res) => {
   try {
     
     const { postedBy, text } = req.body;
-    console.log(postedBy, text)
     let {img} = req.body
 
     if (!text || !postedBy) {
@@ -105,17 +104,14 @@ export const likeUnLikePost = async (req, res) => {
       res.status(404).json({ error: "Post not found" });
     }
 
-    console.log(post);
     const isLiked = post.likes.includes(user_id);
 
     if (isLiked) {
      const post = await Post.updateOne({ _id: id }, { $pull: { likes: user_id } });
-     console.log(post)
 
       res.status(200).json({ message: "Post UnLiked successfully" });
     } else {
      const post =  await Post.updateOne({ _id: id }, { $push: { likes: user_id } });
-      console.log(post)
       res.status(200).json({ message: "Post Liked successfully" });
     }
   } catch (error) {
@@ -156,13 +152,10 @@ export const replyToPost = async (req, res) => {
 
 export const getFeedPost = async(req,res) => {
     try {
-        console.log("hello")
 
         const userId = req.user._id;
-        console.log(userId)
 
         const user = await User.findById(userId)
-        console.log(user)
 
 
         if (!user) {
