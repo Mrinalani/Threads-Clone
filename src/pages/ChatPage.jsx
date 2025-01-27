@@ -4,15 +4,20 @@ import React, { useEffect, useState } from "react";
 import Conversation from "../components/Conversation";
 import MessageContainer from "../components/MessageContainer";
 import useShowToast from "../hooks/useShowToast"
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { conversationsAtom, selectedConversationAtom } from "../atoms/messagesAtom";
 import { GiConversation } from "react-icons/gi"
+import userAtom from "../atoms/userAtom";
 
 const ChatPage = () => {
   const [loadingConversations, setLoadingConversations] = useState(true);
   const showToast = useShowToast()
   const [conversations, setConnversations] = useRecoilState(conversationsAtom);
   const [selectedConversion, SetSelectedConversion] = useRecoilState(selectedConversationAtom)
+  const [searchText, setSearchText] = useState("")
+  const [searchingUser, setSearchingUser] = useState()
+  const currentUser = useRecoilValue(userAtom)
+
   useEffect(() => {
     const getConversations = async() => {
       try {
@@ -33,6 +38,38 @@ const ChatPage = () => {
     }
     getConversations()
   },[showToast, setConnversations])
+
+  const handleConversionSearch = async(e) => {
+    e.preventDefault();
+      setSearchingUser(true);
+     try {
+      const res = await fetch(`/api/users/profile/${searchText}`);
+      const data = await res.json()
+      if(data.error){
+        showToast("Error", data.error, "error")
+        return
+      }
+      console.log("data", data)
+      console.log("bxjhbdj",data._id, currentUser._id)
+      if(data._id === currentUser._id){
+        showToast("Error", "You cannot message yourself", "error")
+      }
+      if(conversations.find(conversation => conversation.participants[0]._id === data._id)){
+        SetSelectedConversion({
+          _id: conversations.find(conversation => conversation.participants[0]._id === data._id)._id,
+          userId: data._id,
+          username: data.username,
+          userProfilePic: data.profilePic
+        })
+        return;
+      }
+      console.log("conversation", conversations)
+     } catch (error) {
+      showToast("Error", error, "error")
+     }finally{
+      setSearchingUser(false)
+     }
+  }
   return (
     <Box
       position={"absolute"}
@@ -48,10 +85,10 @@ const ChatPage = () => {
       <Flex gap={4} flexDirection={{base:"column", md: "row"}} maxW={{sm:"400px", md: "full"}} mx={"auto"}>
         <Flex flex={30} gap={2} flexDirection={"column"} maxW={{sm:"250px", md:"full"}} mx={"auto"}>
           <Text fontWeight={700} color={useColorModeValue("gray.600", "gray.400")} >Your conversations</Text>
-          <form>
+          <form onSubmit={handleConversionSearch}>
             <Flex alignItems={"center"} gap={2}>
-              <Input placeholder="Search for a user" />
-              <Button size={"sm"}><SearchIcon /></Button>
+              <Input placeholder="Search for a user" value={searchText}  onChange={(e) => setSearchText(e.target.value)}/>
+              <Button size={"sm"} onClick={handleConversionSearch} isLoading={searchingUser}><SearchIcon /></Button>
             </Flex>
           </form>
           {loadingConversations && (
@@ -68,7 +105,7 @@ const ChatPage = () => {
             ))
           )}
           {!loadingConversations && (
-             conversations.map((conversation) => (
+             conversations?.map((conversation) => (
                 < Conversation key={conversation._id} conversation={conversation} />
              ))
           )}

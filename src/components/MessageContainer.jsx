@@ -1,6 +1,5 @@
 import {
   Avatar,
-  AvatarBadge,
   Divider,
   Flex,
   Image,
@@ -88,7 +87,7 @@ const MessageContainer = () => {
           ))
         )}      
       </Flex>
-      <MessageInput />
+      <MessageInput setMessages = {setMessages}/>
     </Flex>
   );
 };

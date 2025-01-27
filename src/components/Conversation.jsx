@@ -48,7 +48,7 @@ const Conversation = ({conversation}) => {
   </Text>
         <Text fontSize={"xs"} display={"flex"} alignItems={"center"}>
           {currentUser._id === lastMessage.sender ? <BsCheck2All size={16} /> : ""}
-            {lastMessage.text.length > 18 ? lastMessage.text.substring(0, 18) + "...": lastMessage.text}
+            {lastMessage.text?.length > 18 ? lastMessage.text.substring(0, 18) + "...": lastMessage.text}
         </Text>
 
       </Stack>
