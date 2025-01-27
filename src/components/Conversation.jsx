@@ -27,7 +27,8 @@ const Conversation = ({conversation}) => {
         _id: conversation._id,
         userId: user._id,
         username: user.username,
-        userProfilePic: user.profilePic
+        userProfilePic: user.profilePic,
+        mock: conversation.mock
       })}
       bg={selectedConversion?._id === conversation._id ? (colorMode === "light" ? "gray.600": "gray.dark"): ""}
     >

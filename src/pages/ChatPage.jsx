@@ -12,7 +12,7 @@ import userAtom from "../atoms/userAtom";
 const ChatPage = () => {
   const [loadingConversations, setLoadingConversations] = useState(true);
   const showToast = useShowToast()
-  const [conversations, setConnversations] = useRecoilState(conversationsAtom);
+  const [conversations, setConversations] = useRecoilState(conversationsAtom);
   const [selectedConversion, SetSelectedConversion] = useRecoilState(selectedConversationAtom)
   const [searchText, setSearchText] = useState("")
   const [searchingUser, setSearchingUser] = useState()
@@ -24,12 +24,11 @@ const ChatPage = () => {
         const res = await fetch("/api/messages/conversations")
 
         const data = await res.json();
-        console.log(data)
         if(data.error){
           showToast("Error", data.error, "error")
           return;
         }
-        setConnversations(data)
+        setConversations(data)
       } catch (error) {
         showToast("Error", error.message, "error")
       }finally{
@@ -37,7 +36,7 @@ const ChatPage = () => {
       }
     }
     getConversations()
-  },[showToast, setConnversations])
+  },[showToast, setConversations])
 
   const handleConversionSearch = async(e) => {
     e.preventDefault();
@@ -49,8 +48,6 @@ const ChatPage = () => {
         showToast("Error", data.error, "error")
         return
       }
-      console.log("data", data)
-      console.log("bxjhbdj",data._id, currentUser._id)
       if(data._id === currentUser._id){
         showToast("Error", "You cannot message yourself", "error")
       }
@@ -63,13 +60,29 @@ const ChatPage = () => {
         })
         return;
       }
-      console.log("conversation", conversations)
+
+      const mockConversation = {
+        mock:true,
+        lastMessage: {
+          text: "",
+          sender: ""
+        },
+        _id:Date.now(),
+        participants: [{
+          _id: data._id,
+          username: data.username,
+          userProfilePic: data.profilePic
+        }]
+      }
+
+      setConversations((prevConv) => [...prevConv, mockConversation])
      } catch (error) {
       showToast("Error", error, "error")
      }finally{
       setSearchingUser(false)
      }
   }
+
   return (
     <Box
       position={"absolute"}
