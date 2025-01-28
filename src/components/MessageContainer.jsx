@@ -8,7 +8,7 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Message from "./Message";
 import MessageInput from "./MessageInput";
 import useShowToast from "../hooks/useShowToast";
@@ -25,6 +25,7 @@ const MessageContainer = () => {
   const currentUser = useRecoilValue(userAtom)
   const {socket} = useSocket();
   const setConversations = useSetRecoilState(conversationsAtom)
+  const messageEndRef = useRef(null)
 
   useEffect(()=>{
     socket?.on("newMessages", (message) => {
@@ -48,6 +49,10 @@ const MessageContainer = () => {
     })
     return () => socket.off("newMessages")
     }, [socket])
+
+    useEffect(()=>{
+   messageEndRef.current?.scrollIntoView({behavior: "smooth"})
+    },[messages])
 
    
 
@@ -113,8 +118,11 @@ const MessageContainer = () => {
       )}
         {!loadingMessages && (
           messages?.map((message) =>(
-             <Message key = {message._id} message={message} ownMessage={currentUser._id === message.sender}
-             />
+            <Flex key={message._id} direction={"column"}
+            ref={messages.length -1 === messages.indexOf(message) ? messageEndRef : null}
+            >
+             <Message key = {message._id} message={message} ownMessage={currentUser._id === message.sender}/>
+             </Flex>
           ))
         )}      
       </Flex>
