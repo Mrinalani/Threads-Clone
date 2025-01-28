@@ -12,9 +12,10 @@ import React, { useEffect, useState } from "react";
 import Message from "./Message";
 import MessageInput from "./MessageInput";
 import useShowToast from "../hooks/useShowToast";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { selectedConversationAtom } from "../atoms/messagesAtom";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { conversationsAtom, selectedConversationAtom } from "../atoms/messagesAtom";
 import userAtom from "../atoms/userAtom";
+import { useSocket } from "../context/SocketContext";
 
 const MessageContainer = () => {
   const showToast = useShowToast();
@@ -22,6 +23,34 @@ const MessageContainer = () => {
   const [loadingMessages, setLoadingMessages] = useState(true);
   const [messages, setMessages] = useState([])
   const currentUser = useRecoilValue(userAtom)
+  const {socket} = useSocket();
+  const setConversations = useSetRecoilState(conversationsAtom)
+
+  useEffect(()=>{
+    socket?.on("newMessages", (message) => {
+      console.log("socket", message)
+      setMessages((prevMessages) => [...prevMessages, message])
+      setConversations((prevConv) => {
+        const updatedConversations = prevConv.map(conversation => {
+          if(conversation._id === selectedConversation._id){
+            return {
+              ...conversation,
+              lastMessage: {
+                text: message.text,
+                sender: message.sender
+              }
+            }
+          }
+          return conversation
+        }) 
+        return updatedConversations
+      })
+    })
+    return () => socket.off("newMessages")
+    }, [socket])
+
+   
+
    useEffect(() => {
       const getMessages = async() => {
         setLoadingMessages(true);
@@ -36,6 +65,7 @@ const MessageContainer = () => {
             return;
           }
           setMessages(data)
+          console.log("data of selected user",data)
         } catch (error) {
           showToast("Error", error.message, "error")
         }finally {
@@ -82,13 +112,13 @@ const MessageContainer = () => {
         ))
       )}
         {!loadingMessages && (
-          messages.map((message) =>(
+          messages?.map((message) =>(
              <Message key = {message._id} message={message} ownMessage={currentUser._id === message.sender}
              />
           ))
         )}      
       </Flex>
-      <MessageInput setMessages = {setMessages}/>
+      <MessageInput setMessages = {setMessages} messages={messages}/>
     </Flex>
   );
 };

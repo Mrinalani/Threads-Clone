@@ -5,7 +5,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { conversationsAtom, selectedConversationAtom } from '../atoms/messagesAtom'
 import useShowToast from '../hooks/useShowToast'
 
-const MessageInput = ({setMessages}) => {
+const MessageInput = ({setMessages, messages}) => {
   const [messageText, setMessageText] = useState()
   const selectedConversation = useRecoilValue(selectedConversationAtom)
   const showToast = useShowToast();
@@ -51,6 +51,8 @@ const MessageInput = ({setMessages}) => {
       }
       
     }
+
+    console.log("message inside message input", messages)
   return (
     <form onSubmit={handeleSendMessage}>
        <InputGroup>
