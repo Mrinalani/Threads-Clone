@@ -7,6 +7,9 @@ import userAtom from "../atoms/userAtom";
 const Message = ({ ownMessage, message }) => {
   const selectedConversation = useRecoilValue(selectedConversationAtom)
   const currentUser = useRecoilValue(userAtom)
+  console.log("selectedConversation", selectedConversation)
+  console.log("currentUser", currentUser)
+
   return (
     <>
       {ownMessage ? (
@@ -20,8 +23,7 @@ const Message = ({ ownMessage, message }) => {
         <Flex gap={2}>
           <Avatar src={currentUser.profilePic} w={"7"} h={"7"} />
           <Text maxW={"330px"} bg={"gray.400"} color={"black"} p={1} borderRadius={"md"}>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus esse
-            eius quisquam
+            {message.text}
           </Text>
         </Flex>
       )}
