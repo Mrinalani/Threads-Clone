@@ -55,7 +55,6 @@ const MessageContainer = () => {
     useEffect(()=>{
       const lastMessageIsFromOtherUser = messages.length && messages[messages.length-1].sender !== currentUser._id;
       if(lastMessageIsFromOtherUser){
-        console.log("lastMessageIsFromOtherUser")
         socket.emit("markMessageAsSeen", {
           conversationId: selectedConversation._id,
           userId: selectedConversation.userId

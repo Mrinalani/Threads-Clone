@@ -13,13 +13,11 @@ const io = new Server(server, {
     }
 })
 export const getRecipientSocketId = (recipientId) => {
-    console.log("getbn ", userSocketMap)
    return userSocketMap[recipientId]
 
 }
 const userSocketMap = {} //userId: socket
 io.on('connection', (socket) => {
-    console.log("user connected", socket.id)
     const userId = socket.handshake.query.userId;
     if(userId !== "undefined") userSocketMap[userId] = socket.id
 

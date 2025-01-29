@@ -1,34 +1,99 @@
-import { Avatar, Box, Flex, Text } from "@chakra-ui/react";
-import React from "react";
+import { Avatar, Box, Flex, Image, Skeleton, Text } from "@chakra-ui/react";
+import React, { useState } from "react";
 import { useRecoilValue } from "recoil";
 import { selectedConversationAtom } from "../atoms/messagesAtom";
 import userAtom from "../atoms/userAtom";
-import {BsCheck2All} from "react-icons/bs"
+import { BsCheck2All } from "react-icons/bs";
 
 const Message = ({ ownMessage, message }) => {
-  const selectedConversation = useRecoilValue(selectedConversationAtom)
-  const currentUser = useRecoilValue(userAtom)
-  console.log("selectedConversation", selectedConversation)
-  console.log("currentUser", currentUser)
-
+  const selectedConversation = useRecoilValue(selectedConversationAtom);
+  const currentUser = useRecoilValue(userAtom);
+const [imageLoaded, setImageLoaded] = useState(false)
   return (
     <>
       {ownMessage ? (
         <Flex gap={2} alignSelf={"flex-end"}>
-          <Flex bg={"green.800"} maxW={"350px"} p={1} borderRadius={"md"}>
-             <Text color={"white"}> {message.text} </Text>
-             <Box alignSelf={"flex-end"} ml={1} color={message.seen ? "blue.400": ""} fontWeight={"bold"}>
-              <BsCheck2All size={16} />
-             </Box>
-          </Flex>
+          {message.text && (
+            <Flex bg={"green.800"} maxW={"350px"} p={1} borderRadius={"md"}>
+              <Box
+                alignSelf={"flex-end"}
+                ml={1}
+                color={message.seen ? "blue.400" : ""}
+                fontWeight={"bold"}
+              >
+                <BsCheck2All size={16} />
+              </Box>
+            </Flex>
+          )}
+          {message.img && !imageLoaded &&(
+            <Flex mt={5} w={"200px"}>
+              <Image
+                src={message.img}
+                hidden
+                onLoad={() => setImageLoaded(true)}
+                alt="message image"
+                borderRadius={4}
+              />
+              <Skeleton w={"200px"} h={"200px"} />
+            </Flex>
+          )}
+
+{message.img && imageLoaded &&(
+            <Flex mt={5} w={"200px"}>
+              <Image
+                src={message.img}
+                alt="message image"
+                borderRadius={4}
+              />
+               <Box
+                alignSelf={"flex-end"}
+                ml={1}
+                color={message.seen ? "blue.400" : ""}
+                fontWeight={"bold"}
+              >
+                <BsCheck2All size={16} />
+              </Box>
+            </Flex>
+          )}
           <Avatar src={currentUser.profilePic} w={"7"} h={"7"} />
         </Flex>
       ) : (
         <Flex gap={2}>
           <Avatar src={selectedConversation.userProfilePic} w={"7"} h={"7"} />
-          <Text maxW={"330px"} bg={"gray.400"} color={"black"} p={1} borderRadius={"md"}>
-            {message.text}
-          </Text>
+          {message.text && (
+            <Text
+              maxW={"330px"}
+              bg={"gray.400"}
+              color={"black"}
+              p={1}
+              borderRadius={"md"}
+            >
+              {message.text}
+            </Text>
+          )}
+
+{message.img && !imageLoaded &&(
+            <Flex mt={5} w={"200px"}>
+              <Image
+                src={message.img}
+                hidden
+                onLoad={() => setImageLoaded(true)}
+                alt="message image"
+                borderRadius={4}
+              />
+              <Skeleton w={"200px"} h={"200px"} />
+            </Flex>
+          )}
+
+{message.img && imageLoaded &&(
+            <Flex mt={5} w={"200px"}>
+              <Image
+                src={message.img}
+                alt="message image"
+                borderRadius={4}
+              />
+            </Flex>
+          )}
         </Flex>
       )}
     </>
