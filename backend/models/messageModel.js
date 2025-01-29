@@ -11,6 +11,10 @@ sender: {
 },
 text: {
     type: String
+},
+seen:{
+    type: Boolean,
+    default: false
 }
 
 }, {timeStamps:true})

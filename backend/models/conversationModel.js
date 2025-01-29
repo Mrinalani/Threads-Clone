@@ -12,8 +12,13 @@ lastMessage: {
     sender: {
         type: mongoose.Schema.Types.ObjectId,
         ref : "User"
+    },
+    seen:{
+        type: Boolean,
+        default: false
     }
 },
+
 
 
 }, {timeStamps:true})
