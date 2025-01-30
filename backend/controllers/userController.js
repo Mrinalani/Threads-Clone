@@ -58,6 +58,10 @@ try {
     if(!user || !isPasswordcorrect){
        return res.status(400).json({ error: "Invalid username or password"});
     }
+    if(user.isFrozen){
+      user.isFrozen = false;
+    }
+    await user.save();
     generatrTokenAndSetCookies(user._id, res)
 
     return res.status(200).json({
@@ -222,8 +226,26 @@ export const getSuggestedUsers = async (req, res) => {
 		res.status(200).json(suggestedUsers);
 	} catch (error) {
 		res.status(500).json({ error: error.message });
+    console.log(error)
 	}
 };
+
+export const freezAccount = async(req, res) => {
+ try {
+  const user = await User.findById(req.user._id);
+  if(!user){
+    return res.status(400).json({error: "User not found"});
+  }
+  user.isFrozen = true;
+
+  await user.save();
+  return res.status(200).json({success: true});
+
+ } catch (error) {
+  res.status(500).json({ error: error.message });
+    console.log(error)
+ }
+}
 
 
 

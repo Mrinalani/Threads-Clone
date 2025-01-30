@@ -18,6 +18,10 @@ const useGetUserProfile = () => {
                 showToast("Error", data.error, "error")
                 return
               }
+              if(data.isFrozen){
+              setUser(null);
+              return;
+              }
               setUser(data)    
               console.log("bdjhdbhjbh", data)
             } catch (error) {
