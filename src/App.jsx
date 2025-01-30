@@ -10,6 +10,7 @@ import userAtom from "./atoms/userAtom"
 import UpdateProfilePage from "./pages/updateProfilePage"
 import CreatePost from "./components/CreatePost"
 import ChatPage from "./pages/ChatPage"
+import SettingsPage from "./pages/SettingsPage"
 
 
 function App() {
@@ -39,6 +40,8 @@ function App() {
         }/>
         <Route path="/:username/post/:pId" element={<PostPage />}/>
         <Route path="/chat" element={user ? <ChatPage /> : <Navigate to={"/auth"} />}/>
+        <Route path="/settings" element={user ? <SettingsPage /> : <Navigate to={"/auth"} />}/>
+
 
       </Routes>
 
