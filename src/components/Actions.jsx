@@ -24,8 +24,6 @@ import postAtom from "../atoms/postAtom";
 // import postsAtom from "../atoms/postsAtom";
 
 const Actions = ({ post}) => {
-	console.log("testing post", post)
-
 	const { isOpen, onOpen, onClose } = useDisclosure()
 
 	const showToast = useShowToast()
@@ -106,7 +104,7 @@ const Actions = ({ post}) => {
 					return p;
 				})
 				setPosts(updatedPosts)
-				showToast("Error", "Reply posted successfully", "Error")
+				showToast("Success", "Reply posted successfully", "success")
 				onClose()
 				setReply("")
 		} catch (error) {

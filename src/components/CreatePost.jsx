@@ -36,7 +36,7 @@ const CreatePost = () => {
   const [loading, setLoading] = useState(false)
   const { handleImageChange, imgUrl, setImageUrl } = usePreviewImage();
   const imageRef = useRef();
-  const username = useParams()
+  const {username} = useParams()
   const showToast = useShowToast();
   const [posts, setPosts] = useRecoilState(postAtom)
 

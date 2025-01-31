@@ -125,9 +125,6 @@ export const updateuser = async(req, res) => {
       let {profilePic} = req.body
       const userId = req.user._id;
      
-      console.log(userId.toString())
-      console.log(req.params.id)
-
       let user = await User.findById(userId);
 
       if(!user){
@@ -222,7 +219,6 @@ export const getSuggestedUsers = async (req, res) => {
 		const suggestedUsers = filteredUsers.slice(0, 4);
 
 		suggestedUsers.forEach((user) => (user.password = null));
-   console.log("suggested", suggestedUsers)
 		res.status(200).json(suggestedUsers);
 	} catch (error) {
 		res.status(500).json({ error: error.message });

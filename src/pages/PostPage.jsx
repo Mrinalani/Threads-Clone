@@ -9,7 +9,6 @@ import {
   Text,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { BsThreeDots } from "react-icons/bs";
 import Actions from "../components/Actions";
 import Comment from "../components/Comment";
 import useGetUserProfile from "../hooks/useGetUserProfile";
@@ -42,8 +41,6 @@ const PostPage = () => {
           showToast("Error", data.error, "error");
           return;
         }
-        console.log("getpost1", data);
-        console.log("getpost2", post);
         setPosts([data]);
       } catch (error) {
         showToast("Error", error, "error");
@@ -122,15 +119,7 @@ const PostPage = () => {
       <Flex>
         <Actions post={post} />
       </Flex>
-      {/* <Flex gap={2} alignItems={"center"}>
-        <Text color={"gray.light"} fontSize={"sm"}>
-          {post.replies.length} replies
-        </Text>
-        <Box w={0.5} h={0.5} borderRadius={"full"} bg={"gray.light"}></Box>
-        <Text color={"gray.light"} fontSize={"sm"}>
-          {post.likes.length } likes
-        </Text>
-      </Flex> */}
+    
       <Divider my={4} />
       <Flex justifyContent={"space-between"}>
         <Flex gap={2} alignItems={"center"}>

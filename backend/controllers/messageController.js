@@ -50,7 +50,6 @@ try {
      
      const recipientSocketId = getRecipientSocketId(recipientId);
     if(recipientSocketId){
-        console.log("recipientSocketId", recipientSocketId)
         io.to(recipientSocketId).emit("newMessages", newMessage)
     }
      return res.status(201).json(newMessage)

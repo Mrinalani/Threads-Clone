@@ -11,7 +11,6 @@ import userAtom from '../atoms/userAtom'
 import postAtom from '../atoms/postAtom'
 
 const Post = ({post, postedBy}) => {
-    console.log("post and posted by", post, postedBy)
   const [user, setuser] = useState(null)
   const showToast = useShowToast()
   const navigate = useNavigate()

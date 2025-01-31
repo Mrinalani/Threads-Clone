@@ -11,7 +11,7 @@ export const createPost = async (req, res) => {
     if (!text || !postedBy) {
       return res
         .status(400)
-        .json({ error: "postedBy and text field is required" });
+        .json({ error: "text field is required" });
     }
 
     const user = await User.findById(postedBy);
@@ -163,12 +163,8 @@ export const getFeedPost = async(req,res) => {
           }
 
           const following = user.following;
-          console.log(following)
-
 
           const feedPost = await Post.find({postedBy: {$in: following}}).sort({createdAt: -1});
-          console.log(feedPost)
-
 
           return res.status(200).json(feedPost)
         
