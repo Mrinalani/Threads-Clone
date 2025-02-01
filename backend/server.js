@@ -11,6 +11,7 @@ import messageRoutes from './routes/messageRoutes.js';
 import { app, server } from './socket/socket.js';
 
 import { v2 as cloudinary } from 'cloudinary';
+import job from './cron/cron.js';
 
 dotenv.config();
 connectDB();
