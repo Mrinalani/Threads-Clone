@@ -14,6 +14,7 @@ import { v2 as cloudinary } from 'cloudinary';
 
 dotenv.config();
 connectDB();
+job.start();
 
 // Fix __dirname
 const __filename = fileURLToPath(import.meta.url);
