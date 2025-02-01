@@ -1,6 +1,6 @@
 import { Box, Flex, Skeleton, SkeletonCircle, Text } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
-import SuggestedUser from './suggestedUser'
+import SuggestedUser from './SuggestedUser.jsx'
 import useShowToast from '../hooks/useShowToast'
 
 const SuggestedUsers = () => {
