@@ -1,6 +1,6 @@
 import React from 'react'
-import SignupCart from '../components/SignUpCard'
-import LoginCard from '../components/LoginCard'
+import SignupCart from '../components/SignupCard.jsx'
+import LoginCard from '../components/LoginCard.jsx'
 import { useRecoilValue } from 'recoil'
 import authScreenAtom from '../atoms/authAtom'
 
