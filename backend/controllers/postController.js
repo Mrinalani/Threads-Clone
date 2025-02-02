@@ -150,29 +150,46 @@ export const replyToPost = async (req, res) => {
   }
 };
 
-export const getFeedPost = async(req,res) => {
-    try {
+// export const getFeedPost = async(req,res) => {
+//     try {
 
-        const userId = req.user._id;
+//         const userId = req.user._id;
 
-        const user = await User.findById(userId)
+//         const user = await User.findById(userId)
 
 
-        if (!user) {
-            return res.status(404).json({ error: "User Not Found" });
-          }
+//         if (!user) {
+//             return res.status(404).json({ error: "User Not Found" });
+//           }
 
-          const following = user.following;
+//           const following = user.following;
 
-          const feedPost = await Post.find({postedBy: {$in: following}}).sort({createdAt: -1});
+//           const feedPost = await Post.find({postedBy: {$in: following}}).sort({createdAt: -1});
 
-          return res.status(200).json(feedPost)
+//           return res.status(200).json(feedPost)
         
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    console.log("error in feed post", error.message);
-    }
-}
+//     } catch (error) {
+//         res.status(500).json({ error: error.message });
+//     console.log("error in feed post", error.message);
+//     }
+// }
+export const getFeedPost = async (req, res) => {
+  try {
+      const userId = req.user._id;
+
+      const feedPost = await Post.aggregate([
+          { $match: { postedBy: { $ne: userId } } }, 
+          { $sample: { size: 10 } }
+      ]);
+
+      return res.status(200).json(feedPost);
+
+  } catch (error) {
+      console.log("Error in feed post:", error.message);
+      res.status(500).json({ error: error.message });
+  }
+};
+
 
 export const getUserPosts = async(req, res) => {
 try {
